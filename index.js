@@ -5,20 +5,15 @@ export const allEqual = arr => arr.every(val => val === arr[0]);
 export const any = (arr, fn = Boolean) => arr.some(fn);
 
 export const arrayToCSV = (arr, delimiter = ',') =>
-  arr
-    .map(v => v.map(x => (isNaN(x) ? `"${x.replace(/"/g, '""')}"` : x)).join(delimiter))
-    .join('\n');
+  arr.map(v => v.map(x => (isNaN(x) ? `"${x.replace(/"/g, '""')}"` : x)).join(delimiter)).join('\n');
 
 export const bifurcate = (arr, filter) =>
   arr.reduce((acc, val, i) => (acc[filter[i] ? 0 : 1].push(val), acc), [[], []]);
 
-export const bifurcateBy = (arr, fn) =>
-  arr.reduce((acc, val, i) => (acc[fn(val, i) ? 0 : 1].push(val), acc), [[], []]);
+export const bifurcateBy = (arr, fn) => arr.reduce((acc, val, i) => (acc[fn(val, i) ? 0 : 1].push(val), acc), [[], []]);
 
 export const chunk = (arr, size) =>
-  Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
-    arr.slice(i * size, i * size + size)
-  );
+  Array.from({ length: Math.ceil(arr.length / size) }, (v, i) => arr.slice(i * size, i * size + size));
 
 export const compact = arr => arr.filter(Boolean);
 
@@ -65,8 +60,7 @@ export const filterFalsy = arr => arr.filter(Boolean);
 
 export const filterNonUnique = arr => arr.filter(i => arr.indexOf(i) === arr.lastIndexOf(i));
 
-export const filterNonUniqueBy = (arr, fn) =>
-  arr.filter((v, i) => arr.every((x, j) => (i === j) === fn(v, x, i, j)));
+export const filterNonUniqueBy = (arr, fn) => arr.filter((v, i) => arr.every((x, j) => (i === j) === fn(v, x, i, j)));
 
 export const findLast = (arr, fn) => arr.filter(fn).pop();
 
@@ -104,16 +98,12 @@ export const initializeArrayWithRange = (end, start = 0, step = 1) =>
   Array.from({ length: Math.ceil((end - start + 1) / step) }, (v, i) => i * step + start);
 
 export const initializeArrayWithRangeRight = (end, start = 0, step = 1) =>
-  Array.from({ length: Math.ceil((end + 1 - start) / step) }).map(
-    (v, i, arr) => (arr.length - i - 1) * step + start
-  );
+  Array.from({ length: Math.ceil((end + 1 - start) / step) }).map((v, i, arr) => (arr.length - i - 1) * step + start);
 
 export const initializeArrayWithValues = (n, val = 0) => Array(n).fill(val);
 
 export const initializeNDArray = (val, ...args) =>
-  args.length === 0
-    ? val
-    : Array.from({ length: args[0] }).map(() => initializeNDArray(val, ...args.slice(1)));
+  args.length === 0 ? val : Array.from({ length: args[0] }).map(() => initializeNDArray(val, ...args.slice(1)));
 
 export const intersection = (a, b) => {
   const s = new Set(b);
@@ -139,11 +129,7 @@ export const isSorted = arr => {
 export const join = (arr, separator = ',', end = separator) =>
   arr.reduce(
     (acc, val, i) =>
-      i === arr.length - 2
-        ? acc + val + end
-        : i === arr.length - 1
-        ? acc + val
-        : acc + val + separator,
+      i === arr.length - 2 ? acc + val + end : i === arr.length - 1 ? acc + val : acc + val + separator,
     ''
   );
 
@@ -151,11 +137,8 @@ export const JSONtoCSV = (arr, columns, delimiter = ',') =>
   [
     columns.join(delimiter),
     ...arr.map(obj =>
-      columns.reduce(
-        (acc, key) => `${acc}${!acc.length ? '' : delimiter}"${!obj[key] ? '' : obj[key]}"`,
-        ''
-      )
-    )
+      columns.reduce((acc, key) => `${acc}${!acc.length ? '' : delimiter}"${!obj[key] ? '' : obj[key]}"`, '')
+    ),
   ].join('\n');
 
 export const last = arr => arr[arr.length - 1];
@@ -163,9 +146,7 @@ export const last = arr => arr[arr.length - 1];
 export const longestItem = (...vals) => vals.reduce((a, x) => (x.length > a.length ? x : a));
 
 export const mapObject = (arr, fn) =>
-  (a => (
-    (a = [arr, arr.map(fn)]), a[0].reduce((acc, val, ind) => ((acc[val] = a[1][ind]), acc), {})
-  ))();
+  (a => ((a = [arr, arr.map(fn)]), a[0].reduce((acc, val, ind) => ((acc[val] = a[1][ind]), acc), {})))();
 
 export const maxN = (arr, n = 1) => [...arr].sort((a, b) => b - a).slice(0, n);
 
@@ -189,10 +170,7 @@ export const partition = (arr, fn) =>
 export const permutations = arr => {
   if (arr.length <= 2) return arr.length === 2 ? [arr, [arr[1], arr[0]]] : arr;
   return arr.reduce(
-    (acc, item, i) =>
-      acc.concat(
-        permutations([...arr.slice(0, i), ...arr.slice(i + 1)]).map(val => [item, ...val])
-      ),
+    (acc, item, i) => acc.concat(permutations([...arr.slice(0, i), ...arr.slice(i + 1)]).map(val => [item, ...val])),
     []
   );
 };
@@ -206,9 +184,7 @@ export const pull = (arr, ...args) => {
 
 export const pullAtIndex = (arr, pullArr) => {
   let removed = [];
-  let pulled = arr
-    .map((v, i) => (pullArr.includes(i) ? removed.push(v) : v))
-    .filter((v, i) => !pullArr.includes(i));
+  let pulled = arr.map((v, i) => (pullArr.includes(i) ? removed.push(v) : v)).filter((v, i) => !pullArr.includes(i));
   arr.length = 0;
   pulled.forEach(v => arr.push(v));
   return removed;
@@ -244,17 +220,16 @@ export const reducedFilter = (data, keys, fn) =>
 export const reduceSuccessive = (arr, fn, acc) =>
   arr.reduce((res, val, i, arr) => (res.push(fn(res.slice(-1)[0], val, i, arr)), res), [acc]);
 
-export const reduceWhich = (arr, comparator = (a, b) => a - b) =>
-  arr.reduce((a, b) => (comparator(a, b) >= 0 ? b : a));
+export const reduceWhich = (arr, comparator = (a, b) => a - b) => arr.reduce((a, b) => (comparator(a, b) >= 0 ? b : a));
 
 export const reject = (pred, array) => array.filter((...args) => !pred(...args));
 
 export const remove = (arr, func) =>
   Array.isArray(arr)
     ? arr.filter(func).reduce((acc, val) => {
-      arr.splice(arr.indexOf(val), 1);
-      return acc.concat(val);
-    }, [])
+        arr.splice(arr.indexOf(val), 1);
+        return acc.concat(val);
+      }, [])
     : [];
 
 export const sample = arr => arr[Math.floor(Math.random() * arr.length)];
@@ -334,7 +309,7 @@ export const symmetricDifferenceBy = (a, b, fn) => {
 
 export const symmetricDifferenceWith = (arr, val, comp) => [
   ...arr.filter(a => val.findIndex(b => comp(a, b)) === -1),
-  ...val.filter(a => arr.findIndex(b => comp(a, b)) === -1)
+  ...val.filter(a => arr.findIndex(b => comp(a, b)) === -1),
 ];
 
 export const tail = arr => (arr.length > 1 ? arr.slice(1) : arr);
@@ -343,8 +318,7 @@ export const take = (arr, n = 1) => arr.slice(0, n);
 
 export const takeRight = (arr, n = 1) => arr.slice(arr.length - n, arr.length);
 
-export const takeRightWhile = (arr, func) =>
-  arr.reduceRight((acc, el) => (func(el) ? acc : [el, ...acc]), []);
+export const takeRightWhile = (arr, func) => arr.reduceRight((acc, el) => (func(el) ? acc : [el, ...acc]), []);
 
 export const takeWhile = (arr, func) => {
   for (const [i, val] of arr.entries()) if (func(val)) return arr.slice(0, i);
@@ -352,11 +326,7 @@ export const takeWhile = (arr, func) => {
 };
 
 export const toHash = (object, key) =>
-  Array.prototype.reduce.call(
-    object,
-    (acc, data, index) => ((acc[!key ? index : data[key]] = data), acc),
-    {}
-  );
+  Array.prototype.reduce.call(object, (acc, data, index) => ((acc[!key ? index : data[key]] = data), acc), {});
 
 export const union = (a, b) => Array.from(new Set([...a, ...b]));
 
@@ -383,14 +353,14 @@ export const uniqueElementsByRight = (arr, fn) =>
   }, []);
 
 export const uniqueSymmetricDifference = (a, b) => [
-  ...new Set([...a.filter(v => !b.includes(v)), ...b.filter(v => !a.includes(v))])
+  ...new Set([...a.filter(v => !b.includes(v)), ...b.filter(v => !a.includes(v))]),
 ];
 
 export const unzip = arr =>
   arr.reduce(
     (acc, val) => (val.forEach((v, i) => acc[i].push(v)), acc),
     Array.from({
-      length: Math.max(...arr.map(x => x.length))
+      length: Math.max(...arr.map(x => x.length)),
     }).map(x => [])
   );
 
@@ -399,7 +369,7 @@ export const unzipWith = (arr, fn) =>
     .reduce(
       (acc, val) => (val.forEach((v, i) => acc[i].push(v)), acc),
       Array.from({
-        length: Math.max(...arr.map(x => x.length))
+        length: Math.max(...arr.map(x => x.length)),
       }).map(x => [])
     )
     .map(val => fn(...val));
@@ -415,8 +385,7 @@ export const zip = (...arrays) => {
   });
 };
 
-export const zipObject = (props, values) =>
-  props.reduce((obj, prop, index) => ((obj[prop] = values[index]), obj), {});
+export const zipObject = (props, values) => props.reduce((obj, prop, index) => ((obj[prop] = values[index]), obj), {});
 
 export const zipWith = (...array) => {
   const fn = typeof array[array.length - 1] === 'function' ? array.pop() : undefined;
@@ -424,4 +393,3 @@ export const zipWith = (...array) => {
     fn ? fn(...array.map(a => a[i])) : array.map(a => a[i])
   );
 };
-
