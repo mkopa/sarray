@@ -1,0 +1,19 @@
+{
+  "name": "sarray",
+  "version": "1.0.0",
+  "description": "Extra support for arrays",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mkopa/sarray.git"
+  },
+  "author": "Marcin Kopa",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mkopa/sarray/issues"
+  },
+  "homepage": "https://github.com/mkopa/sarray#readme"
+}
